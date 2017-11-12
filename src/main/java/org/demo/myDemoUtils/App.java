@@ -1,4 +1,4 @@
-package org.demo.MyDemoUtils;
+package org.demo.myDemoUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
