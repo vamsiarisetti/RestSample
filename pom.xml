@@ -74,11 +74,11 @@
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901.jdbc4</version>
-<!-- 			<version>9.4-1200-jdbc41</version> -->
+			<!-- <version>9.4-1200-jdbc41</version> -->
 		</dependency>
 
-		
-		
+
+
 		<!-- REST -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
@@ -92,12 +92,10 @@
 			<version>2.5.3</version>
 		</dependency>
 
+		<!-- Commented Log4J to suppress RESULTSET Closed issue while querying DB -->
 		<!-- Log4j Dependencies -->
-		<!-- <dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			<version>1.2.17</version> </dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
