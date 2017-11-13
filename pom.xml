@@ -92,7 +92,8 @@
 			<version>2.5.3</version>
 		</dependency>
 
-		<!-- Commented Log4J to suppress RESULTSET Closed issue while querying DB -->
+		<!-- Commented Log4J to suppress RESULTSET Closed issue while querying 
+			DB -->
 		<!-- Log4j Dependencies -->
 		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
 			<version>1.2.17</version> </dependency> -->

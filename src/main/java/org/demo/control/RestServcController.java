@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.demo.mapping.Person;
@@ -19,16 +21,20 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+//@EnableWebMvc
 @RestController
 public class RestServcController {
 
 	@RequestMapping(value="/getUser/{username}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON)
-	public JSONObject getUserNames(@PathVariable("username") String username) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, JSONException {
+	public @ResponseBody Map<Integer, Map<String, Object>> getUserNames(@PathVariable("username") String username, HttpServletResponse response) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, JSONException {
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		JSONObject json = new JSONObject();
+		response.setHeader("Content-Disposition", "inline; filename=templates.json");
 		try {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
@@ -64,14 +70,14 @@ public class RestServcController {
 			}
 			json.put("Details", mapObj);
 			System.out.println("json map >>" + json);
-			return json;
+			return mapObj;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (session != null)
 				session.close();
 		}
-		return json;
+		return null;
 	}
 
 	@RequestMapping(value="/sayHello/{username}", method=RequestMethod.GET, produces=MediaType.TEXT_PLAIN)
