@@ -15,7 +15,9 @@ import org.demo.mapping.OutputData;
 import org.demo.mapping.Patterns;
 import org.demo.mapping.Person;
 import org.demo.util.HibernateUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.JSONException;
@@ -117,38 +119,46 @@ public class App {
 	}
 
 	public static void main(String[] args) {
-		//new App().doInsert();
+		SessionFactory sessionFactory = null;
+		Session session = null;
+		try {
+			//new App().doInsert();
+			String joinQry = "from InputData iData "
+					+ "INNER JOIN iData.dataConnection dConn "
+					+ "JOIN iData.outputData oData "
+					+ "WHERE iData.inputDataId=:inputDataId";
 
-		/*String joinQry = "from InputData iData "
-				+ "JOIN iData.outputData oData "
-				+ "JOIN iData.dataConnection dConn "
-				+ "JOIN JobStatus jobSts "
-				+ "JOIN InputFields ipFlds "
-				+ "JOIN Patterns patrns "
-				+ "where patrns.inputData=:inputdataid";*/
-		String joinQry = "from InputData iData "
-				+ "INNER JOIN iData.dataConnection dConn "
-				//+ "JOIN iData.outputData oData "
-				+ "WHERE iData.inputDataId=:inputDataId";
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-		Session session = sessionFactory.openSession();
+			String sqlQry = "select * from ed_input_data iData "
+					+ "INNER JOIN ed_data_connection dConn on iData.dataconnId=dConn.dataconnId"
+					+ " INNER JOIN ed_output_data oData on oData.dataconnId=iData.dataconnId"
+					+ " WHERE iData.inputDataId=:inputDataId";
 
-		Query qry = session.createQuery(joinQry);
-		
-		//qry.setString("inputDataId", "2");
-		qry.setInteger("inputDataId", 2);
+			sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
 
-		List<Object[]> list = qry.list();
-		InputData ipData = null;
-		DataConnection dataConnection = null;
-		OutputData outputData = null;
+			Query qry = session.createQuery(joinQry);
+			qry.setInteger("inputDataId", 2);
 
-		for (Object[] object : list) {
-			System.out.println("Object>>"+object);
-			ipData = (InputData) object[0];
-			//outputData = (OutputData) object[1];
-			dataConnection = (DataConnection) object[1];
+			/*SQLQuery sqlQuery = session.createSQLQuery(sqlQry);
+			sqlQuery.setInteger("inputDataId", 2);
+			List<Object[]> list = sqlQuery.list();*/
+
+			List<Object[]> list = qry.list();
+			InputData ipData = null;
+			DataConnection dataConnection = null;
+			OutputData outputData = null;
+
+			for (Object[] object : list) {
+				System.out.println("Object>>"+object);
+				ipData = (InputData) object[0];
+				dataConnection = (DataConnection) object[1];
+				outputData = (OutputData) object[2];
+			}
+			System.out.println("INPUTDATA : "+ipData+"\n OUTPUTDATA : "+outputData+" \n DATACONNECTION : "+dataConnection);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		System.out.println("INPUTDATA : "+ipData+"\n OUTPUTDATA : "+outputData+" \n DATACONNECTION : "+dataConnection);
 	}
 }
