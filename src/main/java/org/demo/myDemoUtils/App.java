@@ -15,9 +15,7 @@ import org.demo.mapping.OutputData;
 import org.demo.mapping.Patterns;
 import org.demo.mapping.Person;
 import org.demo.util.HibernateUtil;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.JSONException;
@@ -117,12 +115,12 @@ public class App {
 			session.close();
 		}
 	}
+	
+	public static void doJoinQry() {
 
-	public static void main(String[] args) {
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		try {
-			//new App().doInsert();
 			String joinQry = "from InputData iData "
 					+ "INNER JOIN iData.dataConnection dConn "
 					+ "JOIN iData.outputData oData "
@@ -138,10 +136,6 @@ public class App {
 
 			Query qry = session.createQuery(joinQry);
 			qry.setInteger("inputDataId", 2);
-
-			/*SQLQuery sqlQuery = session.createSQLQuery(sqlQry);
-			sqlQuery.setInteger("inputDataId", 2);
-			List<Object[]> list = sqlQuery.list();*/
 
 			List<Object[]> list = qry.list();
 			InputData ipData = null;
@@ -159,6 +153,52 @@ public class App {
 			e.printStackTrace();
 		} finally {
 			session.close();
+		}
+	}
+	public static void qryDataOp() {
+		SessionFactory sessionFactory = null;
+		Session session = null;
+		try {
+			sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+
+			String joinQry = "FROM OutputData opdata "
+					+ "INNER JOIN opdata.dataConnection "
+					//+ "JOIN InputData ipdata "
+					+ "WHERE opdata.outputDataId=:inputDataId";
+
+		/*	"from InputData iData "
+			+ "INNER JOIN iData.dataConnection dConn "
+			+ "JOIN iData.outputData oData "
+			+ "WHERE iData.inputDataId=:inputDataId"*/
+			
+			Query qry = session.createQuery(joinQry);
+			qry.setInteger("inputDataId", 2);
+			List<Object[]> list = qry.list();
+
+			OutputData oData = null;
+			DataConnection dataConn = null;
+			InputData ipdata = null;
+			System.out.println(">>>"+list);
+			for (Object[] objects : list) {
+				oData = (OutputData) objects[0];
+				dataConn = (DataConnection) objects[1];
+				//ipdata = (InputData) objects[2];
+			}
+			System.out.println("OUTPUT DATA :: "+oData+"\nDATA CONNECTION :: "+dataConn+"\nINPUT DATA :: "+ipdata);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+	public static void main(String[] args) {
+		try {
+			//new App().doInsert();
+			qryDataOp();
+			//doJoinQry();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
