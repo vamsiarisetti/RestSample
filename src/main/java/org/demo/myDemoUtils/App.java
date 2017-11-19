@@ -7,6 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.demo.mapping.DataConnection;
+import org.demo.mapping.InputData;
+import org.demo.mapping.InputFields;
+import org.demo.mapping.JobStatus;
+import org.demo.mapping.OutputData;
+import org.demo.mapping.Patterns;
 import org.demo.mapping.Person;
 import org.demo.util.HibernateUtil;
 import org.hibernate.Query;
@@ -17,7 +23,7 @@ import org.json.JSONObject;
 
 public class App {
 
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		try {
 			doSelectUserInfo();
 		} catch (
@@ -72,5 +78,56 @@ public class App {
 		JSONObject json = new JSONObject();
 		json.put("Details", mapObj);
 		System.out.println("json map >>" + json);
+	}
+
+	public void doInsert() {
+		SessionFactory sessionFactory = null;
+        Session session = null;
+        try {
+        	sessionFactory = HibernateUtil.getSessionFactory();
+        	session = sessionFactory.openSession();
+        	session.beginTransaction();
+        	
+        	InputData iData = new InputData();
+        	iData.setInputDataDisplayName("Displat Test Input");
+        	iData.setInputDataSql("Select * from ..");
+        	
+        	DataConnection dataConnection = new DataConnection("http://localhost:8080", "localhost", "postgres", 3);
+        	iData.setDataConnection(dataConnection);
+        	iData.setDataOutput(new OutputData("Test Display Name", "test Table", dataConnection));
+
+        	long inputDataId = (long) session.save(iData);
+
+        	JobStatus jSts = new JobStatus("TASK", "CMPL", 10, "17/11/17", "19/11/17", "This is a test Job Message", iData);
+        	InputFields iFlds = new InputFields(iData, "Test Data Field", "String", "Test Category");
+        	Patterns patterns = new Patterns(iData, "Test Pattern", "17/11/17", "17/11/17", "CMPL");
+
+        	long StatusId = (long) session.save(jSts);
+        	long iFldId = (long) session.save(iFlds);
+        	long patternId = (long) session.save(patterns);
+
+        	session.getTransaction().commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.close();
+		}
+	}
+
+	public static void main(String[] args) {
+		new App().doInsert();
+		/**
+		 * 
+		 * select * from ed_input_data iData
+			JOIN ed_output_data oData on iData.outputdataid=oData.outputdataid
+			JOIN ed_data_connection dConn on dConn.dataconnid=iData.dataconnid
+			JOIN ed_job_status jobSts on jobSts.inputdataid=iData.inputdataid
+			JOIN ed_input_fields ipFlds on ipFlds.inputdataid=iData.inputdataid
+			JOIN ed_patterns patrns on patrns.inputdataid=iData.inputdataid
+			where patrns.inputdataid=2;
+		 * 
+		 */
 	}
 }

@@ -7,7 +7,7 @@
     <session-factory>
     	<!-- Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://127.0.0.1:5432/demodb</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/demodb</property>
         <property name="connection.username">postgres</property>
         <property name="connection.password">postgres</property>
 
@@ -37,5 +37,12 @@
 
         <mapping class="org.demo.mapping.Person"/>
         <mapping class="org.demo.mapping.UserInfo"/>
+        
+        <mapping class="org.demo.mapping.DataConnection"/>
+        <mapping class="org.demo.mapping.InputData"/>
+        <mapping class="org.demo.mapping.OutputData"/>
+        <mapping class="org.demo.mapping.InputFields"/>
+        <mapping class="org.demo.mapping.JobStatus"/>
+        <mapping class="org.demo.mapping.Patterns"/>
     </session-factory>
 </hibernate-configuration>
