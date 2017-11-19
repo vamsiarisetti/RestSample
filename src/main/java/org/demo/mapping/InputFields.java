@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "ED_INPUT_FIELDS")
 public class InputFields implements Serializable {
 	private long inputFieldId;
-	
+
 	//fk from ED_INPUT_DATA.inputDataId
 	//private long inputDataId;
 	private InputData inputData;

@@ -91,7 +91,7 @@ public class App {
         	InputData iData = new InputData();
         	iData.setInputDataDisplayName("Displat Test Input");
         	iData.setInputDataSql("Select * from ..");
-        	
+
         	DataConnection dataConnection = new DataConnection("http://localhost:8080", "localhost", "postgres", 3);
         	iData.setDataConnection(dataConnection);
         	iData.setDataOutput(new OutputData("Test Display Name", "test Table", dataConnection));
@@ -117,17 +117,22 @@ public class App {
 	}
 
 	public static void main(String[] args) {
-		new App().doInsert();
-		/**
-		 * 
-		 * select * from ed_input_data iData
-			JOIN ed_output_data oData on iData.outputdataid=oData.outputdataid
-			JOIN ed_data_connection dConn on dConn.dataconnid=iData.dataconnid
-			JOIN ed_job_status jobSts on jobSts.inputdataid=iData.inputdataid
-			JOIN ed_input_fields ipFlds on ipFlds.inputdataid=iData.inputdataid
-			JOIN ed_patterns patrns on patrns.inputdataid=iData.inputdataid
-			where patrns.inputdataid=2;
-		 * 
-		 */
+		//new App().doInsert();
+
+		String joinQry = "from InputData iData "
+				+ "JOIN iData.outputData oData "
+				+ "JOIN iData.dataConnection dConn "
+				+ "JOIN JobStatus jobSts "
+				+ "JOIN InputFields ipFlds "
+				+ "JOIN Patterns patrns "
+				+ "where patrns.inputData=:inputdataid";
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+
+		Query qry = session.createQuery(joinQry);
+		qry.setString("inputdataid", "2");
+
+		List list = qry.list();
+
 	}
 }
