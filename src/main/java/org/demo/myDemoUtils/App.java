@@ -134,18 +134,21 @@ public class App {
 		Session session = sessionFactory.openSession();
 
 		Query qry = session.createQuery(joinQry);
+		
 		//qry.setString("inputDataId", "2");
 		qry.setInteger("inputDataId", 2);
 
 		List<Object[]> list = qry.list();
 		InputData ipData = null;
 		DataConnection dataConnection = null;
+		OutputData outputData = null;
 
 		for (Object[] object : list) {
 			System.out.println("Object>>"+object);
 			ipData = (InputData) object[0];
+			//outputData = (OutputData) object[1];
 			dataConnection = (DataConnection) object[1];
 		}
-		System.out.println("INPUTDATA : "+ipData+" \n DATACONNECTION : "+dataConnection);
+		System.out.println("INPUTDATA : "+ipData+"\n OUTPUTDATA : "+outputData+" \n DATACONNECTION : "+dataConnection);
 	}
 }
