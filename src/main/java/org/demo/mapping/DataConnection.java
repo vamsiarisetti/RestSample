@@ -14,15 +14,15 @@ import javax.persistence.Table;
 @Table(name = "ED_DATA_CONNECTION")
 public class DataConnection  implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	private long dataConnId;
 	private String dataConnUrl;
 	private String dataConnProviderName;
 	private String dataConnCredentials;
 	private int dataConnRetryMax;
+
+	public DataConnection() {
+	}
 
 	public DataConnection(String dataConnUrl, String dataConnProviderName, String dataConnCredentials, int dataConnRetryMax) {
 		super();

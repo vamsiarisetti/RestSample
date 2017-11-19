@@ -17,6 +17,11 @@ import javax.persistence.Table;
 @Table(name = "ED_INPUT_DATA")
 public class InputData implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// pk
 	private long inputDataId;
 

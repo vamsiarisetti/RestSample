@@ -24,6 +24,9 @@ public class OutputData {
 	private String outputDataDisplayName;
 	private String outputDataTableName;
 
+	public OutputData() {
+	}
+
 	public OutputData(String outputDataDisplayName, String outputDataTableName, DataConnection dataConnection) {
 		super();
 		this.outputDataDisplayName = outputDataDisplayName;

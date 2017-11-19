@@ -119,20 +119,33 @@ public class App {
 	public static void main(String[] args) {
 		//new App().doInsert();
 
-		String joinQry = "from InputData iData "
+		/*String joinQry = "from InputData iData "
 				+ "JOIN iData.outputData oData "
 				+ "JOIN iData.dataConnection dConn "
 				+ "JOIN JobStatus jobSts "
 				+ "JOIN InputFields ipFlds "
 				+ "JOIN Patterns patrns "
-				+ "where patrns.inputData=:inputdataid";
+				+ "where patrns.inputData=:inputdataid";*/
+		String joinQry = "from InputData iData "
+				+ "INNER JOIN iData.dataConnection dConn "
+				//+ "JOIN iData.outputData oData "
+				+ "WHERE iData.inputDataId=:inputDataId";
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.openSession();
 
 		Query qry = session.createQuery(joinQry);
-		qry.setString("inputdataid", "2");
+		//qry.setString("inputDataId", "2");
+		qry.setInteger("inputDataId", 2);
 
-		List list = qry.list();
+		List<Object[]> list = qry.list();
+		InputData ipData = null;
+		DataConnection dataConnection = null;
 
+		for (Object[] object : list) {
+			System.out.println("Object>>"+object);
+			ipData = (InputData) object[0];
+			dataConnection = (DataConnection) object[1];
+		}
+		System.out.println("INPUTDATA : "+ipData+" \n DATACONNECTION : "+dataConnection);
 	}
 }
