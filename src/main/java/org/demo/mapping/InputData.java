@@ -58,10 +58,10 @@ public class InputData implements Serializable{
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "outputDataId")
-	public OutputData getDataOutput() {
+	public OutputData getOutputData() {
 		return outputData;
 	}
-	public void setDataOutput(OutputData outputData) {
+	public void setOutputData(OutputData outputData) {
 		this.outputData = outputData;
 	}
 	public String getInputDataDisplayName() {

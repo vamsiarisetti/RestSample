@@ -94,7 +94,7 @@ public class App {
 
         	DataConnection dataConnection = new DataConnection("http://localhost:8080", "localhost", "postgres", 3);
         	iData.setDataConnection(dataConnection);
-        	iData.setDataOutput(new OutputData("Test Display Name", "test Table", dataConnection));
+        	iData.setOutputData(new OutputData("Test Display Name", "test Table", dataConnection));
 
         	long inputDataId = (long) session.save(iData);
 
